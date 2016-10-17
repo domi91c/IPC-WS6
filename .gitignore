@@ -12,6 +12,8 @@ Debug/
 *.db
 Debug/
 ipch/
+x64/
+.vs/
 
 # Compiled Object files
 *.slo
