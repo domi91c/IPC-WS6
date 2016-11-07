@@ -1,21 +1,21 @@
-/*/*
-== Banking - Savings Account ==
+/*
+   == Banking - Savings Account ==
 
-Author	:
-Date	:
-Revision:
-Workshop: #6 At-Home
+Author  :Dominic Nunes
+Date  :October 27 2016
+Revision:1
+Workshop: #6 in-Lab
 
 */
 
 #include <stdio.h>
+#include <stdbool.h>
 
 
 // Structure Declaration for account
-struct account
-{
-	int accNumber;				// Account number
-	double balance;				// Balance of the account
+struct account {
+  int accNumber;        // Account number
+  double balance;       // Balance of the account
 };
 
 /*  Function to add an amount if positive-valued */
@@ -23,316 +23,128 @@ struct account
 
 /* Function to calculate the interest rate*/
 //
-
-/* Function to deduct an amount if positive-valued*/
-//
-
-/* main program */
-int main()
-{
-	const int nosClients = 5;							// Number of accounts
-	int option;											// Hold the selection
-														// Initialize the struct account array with opening balance
-	struct account acct[] = { { 11111111, 123.45 },{ 22222222, 12365.50 },{ 33333333,0 },{ 44444444,1475 },{ 55555555,25000.65 } };
-
-	printf("***** Welcome to Savings Account Banking *****\n\n");
-
-	do
-	{
-		// Print the option list
-		printf("1.) Deposit \n");
-		printf("2.) Withdraw\n");
-		printf("3.) Apply monthly interest earnings to all accounts\n");
-		printf("4.) Apply service charges to all accounts\n");
-		printf("5.) Account Summary\n");
-		printf("0.) Log out\n\n");
-		printf("Please enter an option to continue: ");
-		
-		// Waiting for the input
-		scanf("%d",&option);
-
-
-		switch (option)
-		{
-		case 0: // Exit the program
-			break;
-
-		case 1: // Deposit
-				//@IN-LAB				
-
-
-			break;
-
-		case 2: // Withdraw funds
-				//@HOME
-
-
-			break;
-
-		case 3: // Apply interest earnings to all accounts
-				//@IN-LAB
-
-
-			break;
-
-		case 4: // Apply Service Charges
-				//@HOME
-
-
-			break;
-
-		case 5: // Display Account Information
-				//@IN-LAB
-
-
-			break;
-
-		default:
-			printf("Error: Please enter a valid option to continue\n\n");
-			break;
-		}
-
-
-	} while (option != 0);
-
-
-	return 0;
+double interestCalc(double balance, double rate) {
+  double interest = (balance * (rate / 100));
+  return interest;
 }
 
+/* main program */
+int main() {
+  int i;
+  const int nosClients = 5;             // Number of accounts
+  int option;                     // Hold the selection
+  int accNumEntry;
+  double depositAmt;
+  int index = 0;
+  bool exists = false;
+  // Initialize the struct account array with opening balance
+  struct account acct[] = {{11111111, 123.45},
+                           {22222222, 12365.50},
+                           {33333333, 0},
+                           {44444444, 1475},
+                           {55555555, 25000.65}};
 
-/* SAMPLE INPUT/OUTPUT EXPECTED */
-/*
-***** Welcome to Savings Account Banking *****
+  printf("***** Welcome to Savings Account Banking *****\n\n");
 
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
+  do {
+    // Print the option list
+    printf("1.) Deposit \n");
+    printf("2.) Withdraw\n");
+    printf("3.) Apply monthly interest earnings to all accounts\n");
+    printf("4.) Apply service charges to all accounts\n");
+    printf("5.) Account Summary\n");
+    printf("0.) Log out\n\n");
+    printf("Please enter an option to continue: ");
 
-Please enter an option to continue: 5
+    // Waiting for the input
+    scanf("%d", &option);
 
--- Account information --
+    switch (option) {
+      case 0: // Exit the program
+        break;
 
-Account# Balance
--------- ----------
-11111111     123.45
-22222222   12365.50
-33333333       0.00
-44444444    1475.00
-55555555   25000.65
+      case 1: // Deposit
+        //@IN-LAB
+        printf("\n-- Make a deposit --\n\n");
+        printf("Enter account number: ");
+        scanf("%i", &accNumEntry);
 
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
+        for (i = 0; i < nosClients; ++i) {
+          if (acct[i].accNumber == accNumEntry) {
+            index = i;
+            exists = true;
+            break;
+          }
+          exists = false;
+        }
 
-Please enter an option to continue: 1
+        if (exists == false) {
+          printf("ERROR: Account number does not exist.\n\n");
+          break;
+        }
 
--- Make a deposit --
+        printf("Enter amount to deposit (CAD): ");
+        scanf("%lf", &depositAmt);
+        acct[index].balance += depositAmt;
+        printf("Current balance is : %0.2lf\n\n", acct[index].balance);
 
-Enter account number: 44444444
-Enter amount to deposit (CAD): 20
-Current balance is : 1495.00
 
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
+        break;
 
-Please enter an option to continue: 1
+      case 2: // Withdraw funds
+        //@HOME
 
--- Make a deposit --
 
-Enter account number: 11111111
-Enter amount to deposit (CAD): 450.67
-Current balance is : 574.12
+        break;
 
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
+      case 3: // Apply interest earnings to all accounts
+        //@IN-LAB
 
-Please enter an option to continue: 5
 
--- Account information --
+        printf("\n-- Add monthly interest earnings to all accounts --\n\n");
+        printf("Account# New Balance Interest Earnings (M)\n");
+        printf("-------- ----------- ---------------------\n");
+        double calcInterest;
+        for (i = 0; i < nosClients; ++i) {
+          if (acct[i].balance < 500) {
+            calcInterest = interestCalc(acct[i].balance, .99);
+          } else if (acct[i].balance > 500 && acct[i].balance <= 1500) {
+            calcInterest = interestCalc(acct[i].balance, 1.66);
+          } else if (acct[i].balance > 1500) {
+            calcInterest = interestCalc(acct[i].balance, 2.49);
+          }
+          acct[i].balance += calcInterest;
+          printf("%8d %11.2lf %21.2lf\n", acct[i].accNumber, acct[i].balance, calcInterest);
+        }
+        printf("\n");
 
-Account# Balance
--------- ----------
-11111111     574.12
-22222222   12365.50
-33333333       0.00
-44444444    1495.00
-55555555   25000.65
+        break;
 
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
+      case 4: // Apply Service Charges
+        //@HOME
 
-Please enter an option to continue: 3
 
--- Add monthly interest earnings to all accounts --
+        break;
 
-Account# New Balance Interest Earnings (M)
--------- ----------- ---------------------
-11111111      583.65                  9.53
-22222222    12673.40                307.90
-33333333        0.00                  0.00
-44444444     1519.82                 24.82
-55555555    25623.17                622.52
+      case 5: // Display Account Information
+        //@IN-LAB
+        printf("\n-- Account information --\n\n");
+        printf("Account# Balance   ");
+        printf("\n-------- ----------\n");
+        for (i = 0; i < nosClients; ++i) {
+          printf("%8d %10.2lf\n", acct[i].accNumber, acct[i].balance);
+        }
+        printf("\n");
+        break;
 
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
+      default:
+        printf("Error: Please enter a valid option to continue\n\n");
+        break;
+    }
 
-Please enter an option to continue: 5
 
--- Account information --
+  } while (option != 0);
 
-Account# Balance
--------- ----------
-11111111     583.65
-22222222   12673.40
-33333333       0.00
-44444444    1519.82
-55555555   25623.17
 
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
-
-Please enter an option to continue: 2
-
--- Withdraw funds --
-
-Enter account number: 67676767
-ERROR: Account number does not exist.
-
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
-
-Please enter an option to continue: 2
-
--- Withdraw funds --
-
-Enter account number: 11111111
-Enter amount to withdraw (CAD): 250
-Current balance is : 333.65
-
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
-
-Please enter an option to continue: 2
-
--- Withdraw funds --
-
-Enter account number: 33333333
-Enter amount to withdraw (CAD): 4500.56
-Withdrawal failed. You only have : 0.00 in your account
-
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
-
-Please enter an option to continue: 2
-
--- Withdraw funds --
-
-Enter account number: 55555555
-Enter amount to withdraw (CAD): 6200.40
-Current balance is : 19422.77
-
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
-
-Please enter an option to continue: 5
-
--- Account information --
-
-Account# Balance
--------- ----------
-11111111     333.65
-22222222   12673.40
-33333333       0.00
-44444444    1519.82
-55555555   19422.77
-
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
-
-Please enter an option to continue: 4
-
--- Apply service charges to all accounts --
-
-Account# New Balance Service charges (M)
--------- ----------- -------------------
-11111111      326.15                7.50
-22222222    12670.90                2.50
-33333333       -7.50                7.50
-44444444     1517.32                2.50
-55555555    19420.27                2.50
-
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
-
-Please enter an option to continue: 5
-
--- Account information --
-
-Account# Balance
--------- ----------
-11111111     326.15
-22222222   12670.90
-33333333      -7.50
-44444444    1517.32
-55555555   19420.27
-
-1.) Deposit
-2.) Withdraw
-3.) Apply monthly interest earnings to all accounts
-4.) Apply service charges to all accounts
-5.) Account Summary
-0.) Log out
-
-Please enter an option to continue: 0
-
-*/
+  return 0;
+}
