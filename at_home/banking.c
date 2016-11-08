@@ -18,11 +18,26 @@ struct account {
   double balance;       // Balance of the account
 };
 
+struct account findAccount(struct account *acct, int nosClients) {
+  int accNumEntry, i;
+  printf("Enter account number: ");
+  scanf("%i", &accNumEntry);
+  for (i = 0; i < nosClients; ++i) {
+    if (acct[i].accNumber == accNumEntry) {
+      return acct[i];
+    }
+  }
+}
+
 /*  Function to add an amount if positive-valued */
-//
+double balanceDown(double balance, double amount) {
+  if (amount > 0) {
+    balance -= amount;
+  }
+  return balance;
+}
 
 /* Function to calculate the interest rate*/
-//
 double interestCalc(double balance, double rate) {
   double interest = (balance * (rate / 100));
   return interest;
@@ -35,6 +50,7 @@ int main() {
   int option;                     // Hold the selection
   int accNumEntry;
   double depositAmt;
+  double withdrawAmt;
   int index = 0;
   bool exists = false;
   // Initialize the struct account array with opening balance
@@ -78,7 +94,7 @@ int main() {
           exists = false;
         }
 
-        if (exists == false) {
+        if (!exists) {
           printf("ERROR: Account number does not exist.\n\n");
           break;
         }
@@ -94,13 +110,39 @@ int main() {
       case 2: // Withdraw funds
         //@HOME
 
+        printf("\n-- Withdraw funds --\n\n");
+
+
+        printf("Enter account number: ");
+        scanf("%i", &accNumEntry);
+
+        for (i = 0; i < nosClients; ++i) {
+          if (acct[i].accNumber == accNumEntry) {
+            index = i;
+            exists = true;
+            break;
+          }
+          exists = false;
+        }
+
+        if (!exists) {
+          printf("ERROR: Account number does not exist.\n\n");
+          break;
+        }
+
+        printf("Enter amount to withdraw (CAD):");
+        scanf("%lf", &withdrawAmt);
+        acct[index].balance = balanceDown(acct[index].balance, withdrawAmt);
+        if (acct[index].balance >= withdrawAmt) {
+          acct[index].balance -= withdrawAmt;
+          printf("Current balance is : %0.2lf\n\n", acct[index].balance);
+        }
+
 
         break;
 
       case 3: // Apply interest earnings to all accounts
         //@IN-LAB
-
-
         printf("\n-- Add monthly interest earnings to all accounts --\n\n");
         printf("Account# New Balance Interest Earnings (M)\n");
         printf("-------- ----------- ---------------------\n");
