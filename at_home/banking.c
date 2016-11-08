@@ -18,17 +18,6 @@ struct account {
   double balance;       // Balance of the account
 };
 
-struct account findAccount(struct account *acct, int nosClients) {
-  int accNumEntry, i;
-  printf("Enter account number: ");
-  scanf("%i", &accNumEntry);
-  for (i = 0; i < nosClients; ++i) {
-    if (acct[i].accNumber == accNumEntry) {
-      return acct[i];
-    }
-  }
-}
-
 /*  Function to add an amount if positive-valued */
 double balanceDown(double balance, double amount) {
   if (amount > 0) {
@@ -53,6 +42,7 @@ int main() {
   double withdrawAmt;
   int index = 0;
   bool exists = false;
+  double sCh;
   // Initialize the struct account array with opening balance
   struct account acct[] = {{11111111, 123.45},
                            {22222222, 12365.50},
@@ -95,24 +85,25 @@ int main() {
         }
 
         if (!exists) {
-          printf("ERROR: Account number does not exist.\n\n");
+          printf("ERROR: Account number does not exist.\n");
+
+          printf("\n");
           break;
         }
 
         printf("Enter amount to deposit (CAD): ");
         scanf("%lf", &depositAmt);
         acct[index].balance += depositAmt;
-        printf("Current balance is : %0.2lf\n\n", acct[index].balance);
+        printf("Current balance is : %0.2lf\n", acct[index].balance);
 
 
+        printf("\n");
         break;
 
       case 2: // Withdraw funds
         //@HOME
 
         printf("\n-- Withdraw funds --\n\n");
-
-
         printf("Enter account number: ");
         scanf("%i", &accNumEntry);
 
@@ -126,19 +117,22 @@ int main() {
         }
 
         if (!exists) {
-          printf("ERROR: Account number does not exist.\n\n");
+          printf("ERROR: Account number does not exist.\n");
+
+          printf("\n");
           break;
         }
 
         printf("Enter amount to withdraw (CAD):");
         scanf("%lf", &withdrawAmt);
-        acct[index].balance = balanceDown(acct[index].balance, withdrawAmt);
-        if (acct[index].balance >= withdrawAmt) {
-          acct[index].balance -= withdrawAmt;
-          printf("Current balance is : %0.2lf\n\n", acct[index].balance);
+        if (balanceDown(acct[index].balance, withdrawAmt) < 0) {
+          printf("Withdrawal failed. You only have : %0.2lf in your account\n", acct[index].balance);
+        } else {
+          acct[index].balance = balanceDown(acct[index].balance, withdrawAmt);
+          printf("Current balance is : %0.2lf\n", acct[index].balance);
         }
 
-
+        printf("\n");
         break;
 
       case 3: // Apply interest earnings to all accounts
@@ -158,14 +152,28 @@ int main() {
           acct[i].balance += calcInterest;
           printf("%8d %11.2lf %21.2lf\n", acct[i].accNumber, acct[i].balance, calcInterest);
         }
-        printf("\n");
 
+        printf("\n");
         break;
 
+        //TODO
       case 4: // Apply Service Charges
         //@HOME
+        printf("Account# New Balance Service charges (M)\n");
+        printf("-------- ----------- -------------------\n");
+        for (i = 0; i < nosClients; ++i) {
+          if (acct[i].balance <= 1500) {
+            sCh = 7.50;
+            acct[i].balance = balanceDown(acct[i].balance, sCh);
+          } else if (acct[i].balance > 1500) {
+            sCh = 2.50;
+            acct[i].balance = balanceDown(acct[i].balance, sCh);
+          }
+          printf("%8d %11.2lf %19.2lf\n", acct[i].accNumber, acct[i].balance, sCh);
+        }
 
 
+        printf("\n");
         break;
 
       case 5: // Display Account Information
@@ -180,7 +188,9 @@ int main() {
         break;
 
       default:
-        printf("Error: Please enter a valid option to continue\n\n");
+        printf("Error: Please enter a valid option to continue\n");
+
+        printf("\n");
         break;
     }
 
